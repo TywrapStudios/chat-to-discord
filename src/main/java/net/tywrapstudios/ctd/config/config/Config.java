@@ -11,11 +11,14 @@ public class Config {
     public final boolean debug_mode;
     // Embed mode;
     public final boolean embed_mode;
+    // Suppress Warnings;
+    public boolean suppress_warns;
 
     public Config(Data data) {
         this.CONFIG_DO_NOT_TOUCH = data.CONFIG_DO_NOT_TOUCH;
         this.discord_webhooks = data.discord_webhooks;
         this.debug_mode = data.debug_mode;
         this.embed_mode = data.embed_mode;
+        this.suppress_warns = data.suppress_warns;
     }
 }

@@ -11,6 +11,8 @@ public class Data {
     public List<String> discord_webhooks = new ArrayList<>();
     public boolean debug_mode = false;
     public boolean embed_mode = false;
+    public String c = "Set this to true if you wish not to receive LOGGER.error messages. NOT RECOMMENDED!!";
+    public boolean suppress_warns = false;
 
     public void update() {
     }
