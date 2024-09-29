@@ -27,7 +27,7 @@ public abstract class ReloadMyConfig {
             Manager.reloadConfig(context);
         } else {
             source.sendFeedback(() -> {
-                return Text.literal("[ChatToDiscord] Could not reload Pekilog Config: Version out of sync, please delete your config file and rerun Minecraft.").formatted(Formatting.DARK_RED);
+                return Text.literal("[ChatToDiscord] Could not reload CTD Config: Version out of sync, please delete your config file and rerun Minecraft.").formatted(Formatting.DARK_RED);
             }, false);
             logger.error("[Config] Your Config Version is out of Sync, please delete your config file and reload Minecraft.");
         }

@@ -65,7 +65,9 @@ public class WebhookClient {
                 handleErrorResponse(connection, responseCode);
             }
         } catch (IOException | URISyntaxException e) {
-            logger.error("[I/O] Error: {}", e.getMessage());
+            if (!Manager.getConfig().suppress_warns) {
+                logger.error("[I/O] Error: {}", e.getMessage());
+            }
             callback.onFailure(-1, e.getMessage());
         }
     }

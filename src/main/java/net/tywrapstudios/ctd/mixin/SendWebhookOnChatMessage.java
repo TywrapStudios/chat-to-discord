@@ -37,7 +37,9 @@ public abstract class SendWebhookOnChatMessage {
                 }
             }
         } else {
-            ChatToDiscord.LOGGER.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
+            if (!config.suppress_warns) {
+                ChatToDiscord.LOGGER.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ public class Manager {
         }
         catch(IOException exception) {
             CONFIG = oldConfig;
-            logger.error("[Config] Something went wrong while reading config!");
+            logger.warn("[Config] Something went wrong while reading config!");
         }
     }
 

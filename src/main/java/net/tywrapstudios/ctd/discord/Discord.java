@@ -64,7 +64,9 @@ public class Discord {
         }
     }
     private static void logFailure(String chatMessage, int statusCode, String errorMessage, String playerName, String UUID) {
-        logger.warn("Message \"{}\" by {}[{}] failed to send. ", chatMessage, playerName, UUID);
-        logger.warn("Code: {} Error: {}", statusCode, errorMessage);
+        if (!config.suppress_warns) {
+            logger.warn("Message \"{}\" by {}[{}] failed to send. ", chatMessage, playerName, UUID);
+            logger.warn("Code: {} Error: {}", statusCode, errorMessage);
+        }
     }
 }

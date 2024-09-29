@@ -39,7 +39,9 @@ public class WebhookConnector {
         if (isValidUrl) {
             this.webhookUrl = webhookUrl;
         } else {
-            logger.error("[Discord] Invalid webhook URL: {}", webhookUrl);
+            if (!Manager.getConfig().suppress_warns) {
+                logger.error("[Discord] Invalid webhook URL: {}", webhookUrl);
+            }
         }
 
         // Return the updated instance of WebhookManager.
@@ -139,7 +141,7 @@ public class WebhookConnector {
         java.util.logging.Logger s_logger = java.util.logging.Logger.getLogger(WebhookConnector.class.getName());
         s_logger.log(Level.SEVERE, "JSON Error: ", exception);
 
-        if (Manager.getConfig().debug_mode) {
+        if (Manager.getConfig().debug_mode&&!Manager.getConfig().suppress_warns) {
             debug.error("[JSON] Error: {}", exception.getMessage());
         }
 
