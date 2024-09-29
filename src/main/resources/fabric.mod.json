@@ -1,0 +1,35 @@
+{
+	"schemaVersion": 1,
+	"id": "ctd",
+	"version": "${version}",
+	"name": "Chat To Discord",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Tywrap Studios",
+		">> Tiazzz"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "ARR",
+	"icon": "assets/ctd/icons/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.tywrapstudios.ctd.ChatToDiscord"
+		]
+	},
+	"mixins": [
+		"ctd.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.2",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

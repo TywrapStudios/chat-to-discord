@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "net.tywrapstudios.ctd.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"ReloadMyConfig",
+		"SendWebhookOnChatMessage"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
