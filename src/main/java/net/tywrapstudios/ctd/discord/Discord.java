@@ -1,5 +1,6 @@
 package net.tywrapstudios.ctd.discord;
 
+import com.pastebin.api.Expiration;
 import com.pastebin.api.Format;
 import com.pastebin.api.PastebinClient;
 import com.pastebin.api.Visibility;
@@ -69,6 +70,7 @@ public class Discord {
                 .content(stack)
                 .visibility(Visibility.UNLISTED)
                 .name("Crash with: "+cause)
+                .expiration(Expiration.ONE_DAY)
                 .format(Format.LOGTALK)
                 .build();
         PastebinClient client = PastebinClient.builder().developerKey(key).build();
