@@ -24,9 +24,9 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// JSON Stuff
-	implementation 'org.json:json:20231013'
+	implementation include('org.json:json:20231013')
 	// Pastebin Uploading
-	implementation 'com.github.caseyscarborough:pastebin-api-java:0.1.3'
+	implementation include('com.github.caseyscarborough:pastebin-api-java:0.1.3')
 }
 
 processResources {
