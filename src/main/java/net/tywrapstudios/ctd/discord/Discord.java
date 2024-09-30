@@ -5,6 +5,7 @@ import net.tywrapstudios.ctd.config.Manager;
 import net.tywrapstudios.ctd.config.config.Config;
 import net.tywrapstudios.ctd.discord.messagetypes.Embed;
 import net.tywrapstudios.ctd.discord.messagetypes.PlainMessage;
+import net.tywrapstudios.ctd.discord.resources.Footer;
 import net.tywrapstudios.ctd.discord.webhook.WebhookClient;
 import net.tywrapstudios.ctd.discord.webhook.WebhookConnector;
 import org.slf4j.Logger;
@@ -16,7 +17,7 @@ public class Discord {
 
     public static void sendMessageToDiscord(String chatMessage, String playerName, String webhookUrl, String UUID) {
         PlainMessage message = new PlainMessage()
-                .setContent(playerName+": "+chatMessage);
+                .setContent("**"+playerName+":** "+chatMessage);
         new WebhookConnector()
                 .setChannelUrl(webhookUrl)
                 .setMessage(message)
@@ -34,10 +35,10 @@ public class Discord {
     }
 
     public static void sendEmbedToDiscord(String chatMessage, String playerName, String webhookUrl, String UUID, int embedColor) {
+        Footer footer = new Footer(playerName+": "+chatMessage,"https://mc-heads.net/avatar/"+UUID+"/90");
         Embed embed = new Embed()
                 .setColor(embedColor)
-                .setTitle(playerName+":")
-                .setDescription(chatMessage);
+                .setFooter(footer);
         PlainMessage message = new PlainMessage()
                 .setContent("");
         new WebhookConnector()
