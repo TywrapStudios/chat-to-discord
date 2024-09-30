@@ -2,6 +2,8 @@ package net.tywrapstudios.ctd;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.minecraft.server.MinecraftServer;
 import net.tywrapstudios.ctd.config.Manager;
 import net.tywrapstudios.ctd.config.config.Config;
 import net.tywrapstudios.ctd.discord.Discord;
@@ -26,9 +28,44 @@ public class ChatToDiscord implements ModInitializer {
 			LOGGER.error("[Config] Your Config somehow got out of sync with the version it's supposed to be. This can be dangerous. Try to re-run the instance or delete the log file.");
 		}
 		if (webhookUrlsList.isEmpty()&&!config.suppress_warns) {
-			LOGGER.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
+			LOGGER.error("[Discord] No Webhooks Defined! Please Configure your webhooks in the Config file: ctd.json");
+		}
+		if (Objects.equals(config.pastebin_api_key, "")&&!config.suppress_warns) {
+			LOGGER.error("[Pastebin] No Pastebin API Key Defined! Please Configure a Key in the Config file: ctd.json");
 		}
 		initializeCTD(config);
+		ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStart);
+		ServerLifecycleEvents.SERVER_STOPPING.register(this::onServerStop);
+	}
+
+	private void onServerStart(MinecraftServer server) {
+		Config config = Manager.getConfig();
+		List<String> webhookUrls = config.discord_webhooks;
+		for (String url : webhookUrls) {
+			if (!config.embed_mode) {
+				Discord.sendMessageToDiscord("Server started.", "Console", url, "console");
+			} else {
+				Discord.sendEmbedToDiscord("Server started.", "Console", url, "console", config.embed_color_rgb_int);
+			}
+			if (Objects.equals(config.pastebin_api_key, "")&&!config.suppress_warns) {
+				Discord.sendEmbedToDiscord("No Pastebin API Key Defined! Please Configure a Key in the Config file: ctd.json", "CTD-Internals", url, "console", 7864320);
+			}
+		}
+	}
+
+	private void onServerStop(MinecraftServer server) {
+		Config config = Manager.getConfig();
+		List<String> webhookUrls = config.discord_webhooks;
+		for (String url : webhookUrls) {
+			if (!config.embed_mode) {
+				Discord.sendMessageToDiscord("Server stopped.", "Console", url, "console");
+			} else {
+				Discord.sendEmbedToDiscord("Server stopped.", "Console", url, "console", config.embed_color_rgb_int);
+			}
+			if (Objects.equals(config.pastebin_api_key, "")&&!config.suppress_warns) {
+				Discord.sendEmbedToDiscord("No Pastebin API Key Defined! Please Configure a Key in the Config file: ctd.json", "CTD-Internals", url, "console", 7864320);
+			}
+		}
 	}
 
 	private static void initializeCTD(Config config) {
@@ -39,18 +76,6 @@ public class ChatToDiscord implements ModInitializer {
 			LOGGER.info("[CTD] Embed mode enabled.");
 		} else {
 			LOGGER.info("[CTD] Embed mode disabled.");
-		}
-
-		if (config.debug_mode) {
-			DEBUG.info("[CTD] Attempt to send startup message to webhook(s).");
-		}
-		List<String> webhookUrls = config.discord_webhooks;
-		for (String url : webhookUrls) {
-			if (!config.embed_mode) {
-				Discord.sendMessageToDiscord("[CTD] Initialized.", "Console", url, "console");
-			} else {
-				Discord.sendEmbedToDiscord("[CTD] Initialized.", "Console", url, "console", config.embed_color_rgb_int);
-			}
 		}
 	}
 }

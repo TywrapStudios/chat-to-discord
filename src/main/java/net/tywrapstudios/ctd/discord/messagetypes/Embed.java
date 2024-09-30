@@ -95,7 +95,7 @@ public class Embed {
                     fieldsArr.put(item.get());
                 }
 
-                if (fieldsArr.length() != 0) {
+                if (!fieldsArr.isEmpty()) {
                     obj.put("fields", fieldsArr);
                 }
             }

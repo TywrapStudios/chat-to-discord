@@ -122,7 +122,7 @@ public class WebhookConnector {
                     embedsArr.put(item.get());
                 }
 
-                if (embedsArr.length() != 0) {
+                if (!embedsArr.isEmpty()) {
                     obj.put("embeds", embedsArr);
                 }
             }

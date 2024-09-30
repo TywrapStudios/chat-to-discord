@@ -1,5 +1,9 @@
 package net.tywrapstudios.ctd.discord;
 
+import com.pastebin.api.Format;
+import com.pastebin.api.PastebinClient;
+import com.pastebin.api.Visibility;
+import com.pastebin.api.request.PasteRequest;
 import net.tywrapstudios.ctd.ChatToDiscord;
 import net.tywrapstudios.ctd.config.Manager;
 import net.tywrapstudios.ctd.config.config.Config;
@@ -14,6 +18,7 @@ public class Discord {
     static Config config = Manager.getConfig();
     static Logger logger = ChatToDiscord.LOGGER;
     static Logger debug = ChatToDiscord.DEBUG;
+    static String key = config.pastebin_api_key;
 
     public static void sendMessageToDiscord(String chatMessage, String playerName, String webhookUrl, String UUID) {
         PlainMessage message = new PlainMessage()
@@ -54,6 +59,40 @@ public class Discord {
                     @Override
                     public void onFailure(int statusCode, String errorMessage) {
                         logFailure(chatMessage, statusCode, errorMessage, playerName, UUID);
+                    }
+                })
+                .exec();
+    }
+
+    public static void sendCrashEmbed(String cause, int embedColor, String webhookUrl, String stack) {
+        PasteRequest request = PasteRequest
+                .content(stack)
+                .visibility(Visibility.UNLISTED)
+                .name("Crash with: "+cause)
+                .format(Format.LOGTALK)
+                .build();
+        PastebinClient client = PastebinClient.builder().developerKey(key).build();
+        String url = client.paste(request);
+        String description = "**Minecraft crashed with the following given cause:**\n```\n"+cause+"\n```\n\n### \uD83D\uDD17 [STACKTRACE]("+url+")";
+        Embed embed = new Embed()
+                .setColor(embedColor)
+                .setTitle("MINECRAFT EXPERIENCED AN EXCEPTION!")
+                .setDescription(description);
+        PlainMessage message = new PlainMessage()
+                .setContent("");
+        new WebhookConnector()
+                .setChannelUrl(webhookUrl)
+                .setEmbeds(new Embed[]{embed})
+                .setMessage(message)
+                .setListener(new WebhookClient.Callback() {
+                    @Override
+                    public void onSuccess(String response) {
+                        logSuccess("CTD", "CTD-Internals", "Sent a Crash notice to the webhook(s).");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, String errorMessage) {
+                        logFailure(cause, statusCode, errorMessage, "CTD", "CTD-Internals");
                     }
                 })
                 .exec();
