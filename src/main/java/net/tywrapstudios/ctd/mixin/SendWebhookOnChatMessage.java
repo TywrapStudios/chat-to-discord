@@ -33,7 +33,7 @@ public abstract class SendWebhookOnChatMessage {
                 if (!config.embed_mode) {
                     Discord.sendMessageToDiscord(messageStr, authorName, url, authorUUID);
                 } else {
-                    Discord.sendEmbedToDiscord(messageStr, authorName, url, authorUUID);
+                    Discord.sendEmbedToDiscord(messageStr, authorName, url, authorUUID, config.embed_color_rgb_int);
                 }
             }
         } else {

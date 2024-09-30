@@ -13,7 +13,6 @@ public class Discord {
     static Config config = Manager.getConfig();
     static Logger logger = ChatToDiscord.LOGGER;
     static Logger debug = ChatToDiscord.DEBUG;
-    static int embedColor = config.embed_color_rgb_int;
 
     public static void sendMessageToDiscord(String chatMessage, String playerName, String webhookUrl, String UUID) {
         PlainMessage message = new PlainMessage()
@@ -34,7 +33,7 @@ public class Discord {
                 .exec();
     }
 
-    public static void sendEmbedToDiscord(String chatMessage, String playerName, String webhookUrl, String UUID) {
+    public static void sendEmbedToDiscord(String chatMessage, String playerName, String webhookUrl, String UUID, int embedColor) {
         Embed embed = new Embed()
                 .setColor(embedColor)
                 .setTitle(playerName+":")
