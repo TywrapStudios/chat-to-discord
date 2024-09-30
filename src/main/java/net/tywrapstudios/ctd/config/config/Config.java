@@ -11,6 +11,8 @@ public class Config {
     public final boolean debug_mode;
     // Embed mode;
     public final boolean embed_mode;
+    // Embed Colour
+    public final int embed_color_rgb_int;
     // Suppress Warnings;
     public boolean suppress_warns;
 
@@ -19,6 +21,7 @@ public class Config {
         this.discord_webhooks = data.discord_webhooks;
         this.debug_mode = data.debug_mode;
         this.embed_mode = data.embed_mode;
+        this.embed_color_rgb_int = data.embed_color_rgb_int;
         this.suppress_warns = data.suppress_warns;
     }
 }
