@@ -15,6 +15,8 @@ import net.tywrapstudios.ctd.discord.webhook.WebhookClient;
 import net.tywrapstudios.ctd.discord.webhook.WebhookConnector;
 import org.slf4j.Logger;
 
+import java.util.Objects;
+
 public class Discord {
     static Config config = Manager.getConfig();
     static Logger logger = ChatToDiscord.LOGGER;
@@ -75,7 +77,11 @@ public class Discord {
                 .build();
         PastebinClient client = PastebinClient.builder().developerKey(key).build();
         String url = client.paste(request);
-        String description = "**Minecraft crashed with the following given cause:**\n```\n"+cause+"\n```\n\n### \uD83D\uDD17 [STACKTRACE]("+url+")";
+        String $1 = "**No Pastebin API Key Defined!**\n**Please Configure a Key in the Config file: __ctd.json__**";
+        if (Objects.equals(config.pastebin_api_key, "")&&!config.suppress_warns) {
+            $1 = "### \uD83D\uDD17 [STACKTRACE](<"+url+">)";
+        }
+        String description = "**Minecraft crashed with the following given cause:**\n```\n"+cause+"\n```\n\n"+$1;
         Embed embed = new Embed()
                 .setColor(embedColor)
                 .setTitle("MINECRAFT EXPERIENCED AN EXCEPTION!")

@@ -62,9 +62,6 @@ public class ChatToDiscord implements ModInitializer {
 			} else {
 				Discord.sendEmbedToDiscord("Server stopped.", "Console", url, "console", config.embed_color_rgb_int);
 			}
-			if (Objects.equals(config.pastebin_api_key, "")&&!config.suppress_warns) {
-				Discord.sendEmbedToDiscord("No Pastebin API Key Defined! Please Configure a Key in the Config file: ctd.json", "CTD-Internals", url, "console", 7864320);
-			}
 		}
 	}
 
