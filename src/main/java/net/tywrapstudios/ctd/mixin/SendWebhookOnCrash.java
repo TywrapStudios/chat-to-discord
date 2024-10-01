@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 @Mixin(CrashReport.class)
 public abstract class SendWebhookOnCrash {
@@ -28,7 +29,11 @@ public abstract class SendWebhookOnCrash {
         int rgb = 7864320;
         List<String> webhookUrls = config.discord_webhooks;
         for (String url : webhookUrls) {
-            Discord.sendCrashEmbed(cause, rgb, url, stack);
+            if (Objects.equals(config.pastebin_api_key, "")&&!config.suppress_warns) {
+                Discord.sendEmbedToDiscord("No Pastebin API Key Defined! Please Configure a Key in the Config file: ctd.json", "CTD-Internals", url, "console", 7864320);
+            } else {
+                Discord.sendCrashEmbed(cause, rgb, url, stack);
+            }
         }
     }
 }
