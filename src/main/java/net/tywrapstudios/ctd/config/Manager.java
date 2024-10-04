@@ -47,7 +47,9 @@ public class Manager {
         }
         catch(IOException exception) {
             CONFIG = oldConfig;
-            logger.error("[Config] Something went wrong while reloading Config!");
+            if (!getConfig().suppress_warns) {
+                logger.error("[Config] Something went wrong while reloading Config!");
+            }
         }
     }
 
