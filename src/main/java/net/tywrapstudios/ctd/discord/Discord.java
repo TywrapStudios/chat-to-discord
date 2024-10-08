@@ -45,7 +45,7 @@ public class Discord {
         } else {
             Footer footer = new Footer(message,"");
             Embed embed = new Embed()
-                    .setColor(1315860)
+                    .setColor(2829617)
                     .setFooter(footer);
             PlainMessage embedMessage = new PlainMessage()
                     .setContent("");
