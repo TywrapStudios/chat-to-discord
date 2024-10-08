@@ -10,6 +10,7 @@ public class Data {
     public String CONFIG_DO_NOT_TOUCH = "1.1";
     public String c0 = "After you've changed any of the values in this file, you can run /reload to apply changes in-game.";
     public List<String> discord_webhooks = new ArrayList<>();
+    public boolean only_send_messages = false;
     public boolean debug_mode = false;
     public boolean embed_mode = false;
     public String c1 = "Please provide your own Pastebin API key from https://pastebin.com/doc_api#1";

@@ -7,6 +7,8 @@ public class Config {
     public final String CONFIG_DO_NOT_TOUCH;
     // Webhook Links;
     public final List<String> discord_webhooks;
+    // If only chat should be sent.
+    public final boolean only_send_messages;
     // If we should log;
     public final boolean debug_mode;
     // Embed mode;
@@ -21,6 +23,7 @@ public class Config {
     public Config(Data data) {
         this.CONFIG_DO_NOT_TOUCH = data.CONFIG_DO_NOT_TOUCH;
         this.discord_webhooks = data.discord_webhooks;
+        this.only_send_messages = data.only_send_messages;
         this.debug_mode = data.debug_mode;
         this.embed_mode = data.embed_mode;
         this.pastebin_api_key = data.pastebin_api_key;

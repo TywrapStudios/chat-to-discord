@@ -45,16 +45,18 @@ public class Handlers {
         boolean embedMode = config.embed_mode;
         String messageFin = message;
         List<String> webhookUrls = config.discord_webhooks;
-        if (!embedMode) {
-            messageFin = "**"+messageFin+"**";
-        }
-        if (!webhookUrls.isEmpty()) {
-            for (String url : webhookUrls) {
-                Discord.sendLiteralToDiscord(messageFin,embedMode,url);
+        if (!config.only_send_messages) {
+            if (!embedMode) {
+                messageFin = "**" + messageFin + "**";
             }
-        } else {
-            if (!config.suppress_warns) {
-                ChatToDiscord.LOGGER.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
+            if (!webhookUrls.isEmpty()) {
+                for (String url : webhookUrls) {
+                    Discord.sendLiteralToDiscord(messageFin, embedMode, url);
+                }
+            } else {
+                if (!config.suppress_warns) {
+                    ChatToDiscord.LOGGER.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
+                }
             }
         }
     }
