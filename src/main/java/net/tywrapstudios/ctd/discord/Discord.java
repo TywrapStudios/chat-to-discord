@@ -43,9 +43,9 @@ public class Discord {
                     })
                     .exec();
         } else {
-            Footer footer = new Footer(message,"");
+            Footer footer = new Footer(message,"https://media.discordapp.net/attachments/1249069998148812930/1293350885837242388/minecraft_logo.png?ex=67070e60&is=6705bce0&hm=33b6d9a9ed182dc00bf080fbfa344a9f27781fde92d9cc9f4d4cfcc54ef40d47&=&format=webp&quality=lossless&width=889&height=889");
             Embed embed = new Embed()
-                    .setColor(2829617)
+                    .setColor(config.embed_color_rgb_int)
                     .setFooter(footer);
             PlainMessage embedMessage = new PlainMessage()
                     .setContent("");

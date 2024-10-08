@@ -38,7 +38,7 @@ public class ChatToDiscord implements ModInitializer {
 	}
 
 	private void onGameMessage(MinecraftServer minecraftServer, Text text, boolean b) {
-		String message = text.getString();
+		String message = Manager.getConfig().embed_mode ? text.getString() : text.getString().replace("_","\\_");
 
 		Handlers.handleGameMessage(message);
 	}

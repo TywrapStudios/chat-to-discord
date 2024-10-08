@@ -13,10 +13,12 @@ public class Handlers {
     public static void handleChatMessage(String messageStr, String authorUUID, String authorName) {
         Config config = Manager.getConfig();
         List<String> webhookUrls = config.discord_webhooks;
+
+        String authorNamed = authorName.replace("_","\\_");
         if (!webhookUrls.isEmpty()) {
             for (String url : webhookUrls) {
                 if (!config.embed_mode) {
-                    Discord.sendChatMessageToDiscord(messageStr, authorName, url, authorUUID);
+                    Discord.sendChatMessageToDiscord(messageStr, authorNamed, url, authorUUID);
                 } else {
                     Discord.sendEmbedToDiscord(messageStr, authorName, url, authorUUID, config.embed_color_rgb_int);
                 }
