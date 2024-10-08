@@ -65,7 +65,7 @@ public class ChatToDiscord implements ModInitializer {
 		List<String> webhookUrlsList = config.discord_webhooks;
 
 		if (!Objects.equals(config.CONFIG_DO_NOT_TOUCH, CONFIG_V)&&!config.suppress_warns) {
-			LOGGER.error("[Config] Your Config somehow got out of sync with the version it's supposed to be. This can be dangerous. Try to re-run the instance or delete the log file.");
+			LOGGER.error("[Config] Your Config somehow got out of sync with the version it's supposed to be. This can be dangerous. Try to re-run the instance after deleting the initial config file.");
 		}
 		if (webhookUrlsList.isEmpty()&&!config.suppress_warns) {
 			LOGGER.error("[Discord] No Webhooks Defined! Please Configure your webhooks in the Config file: ctd.json");
