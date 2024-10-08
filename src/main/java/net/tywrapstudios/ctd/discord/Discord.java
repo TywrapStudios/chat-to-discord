@@ -23,7 +23,52 @@ public class Discord {
     static Logger debug = ChatToDiscord.DEBUG;
     static String key = config.pastebin_api_key;
 
-    public static void sendMessageToDiscord(String chatMessage, String playerName, String webhookUrl, String UUID) {
+    public static void sendLiteralToDiscord(String message, boolean embedMode, String webhookUrl) {
+        if (!embedMode) {
+            PlainMessage literalMessage = new PlainMessage()
+                    .setContent(message);
+            new WebhookConnector()
+                    .setChannelUrl(webhookUrl)
+                    .setMessage(literalMessage)
+                    .setListener(new WebhookClient.Callback() {
+                        @Override
+                        public void onSuccess(String response) {
+                            logSuccess("CTD-Literal","CTD-Literal",message);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, String errorMessage) {
+                            logFailure(message, statusCode, errorMessage, "CTD-Literal", "CTD-Literal");
+                        }
+                    })
+                    .exec();
+        } else {
+            Footer footer = new Footer(message,"");
+            Embed embed = new Embed()
+                    .setColor(1315860)
+                    .setFooter(footer);
+            PlainMessage embedMessage = new PlainMessage()
+                    .setContent("");
+            new WebhookConnector()
+                    .setChannelUrl(webhookUrl)
+                    .setEmbeds(new Embed[]{embed})
+                    .setMessage(embedMessage)
+                    .setListener(new WebhookClient.Callback() {
+                        @Override
+                        public void onSuccess(String response) {
+                            logSuccess("CTD-Literal","CTD-Literal",message);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, String errorMessage) {
+                            logFailure(message, statusCode, errorMessage, "CTD-Literal", "CTD-Literal");
+                        }
+                    })
+                    .exec();
+        }
+    }
+
+    public static void sendChatMessageToDiscord(String chatMessage, String playerName, String webhookUrl, String UUID) {
         PlainMessage message = new PlainMessage()
                 .setContent("**"+playerName+":** "+chatMessage);
         new WebhookConnector()
@@ -78,7 +123,7 @@ public class Discord {
         PastebinClient client = PastebinClient.builder().developerKey(key).build();
         String url = client.paste(request);
         String $1 = "**No Pastebin API Key Defined!**\n**Please Configure a Key in the Config file: __ctd.json__**";
-        if (Objects.equals(config.pastebin_api_key, "")&&!config.suppress_warns) {
+        if (!Objects.equals(config.pastebin_api_key, "")) {
             $1 = "### \uD83D\uDD17 [STACKTRACE](<"+url+">)";
         }
         String description = "**Minecraft crashed with the following given cause:**\n```\n"+cause+"\n```\n\n"+$1;
