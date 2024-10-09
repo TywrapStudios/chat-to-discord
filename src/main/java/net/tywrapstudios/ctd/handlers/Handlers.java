@@ -14,6 +14,8 @@ public class Handlers {
         Config config = Manager.getConfig();
         List<String> webhookUrls = config.discord_webhooks;
 
+        messageStr = Compat.handleCompat(messageStr);
+
         String authorNamed = authorName.replace("_","\\_");
         if (!webhookUrls.isEmpty()) {
             for (String url : webhookUrls) {
