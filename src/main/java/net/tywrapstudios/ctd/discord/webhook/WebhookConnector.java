@@ -1,14 +1,12 @@
 package net.tywrapstudios.ctd.discord.webhook;
 
-import net.tywrapstudios.ctd.ChatToDiscord;
-import net.tywrapstudios.ctd.config.Manager;
 import net.tywrapstudios.ctd.discord.messagetypes.Embed;
 import net.tywrapstudios.ctd.discord.messagetypes.PlainMessage;
 import net.tywrapstudios.ctd.discord.webhook.WebhookClient.Callback;
+import net.tywrapstudios.ctd.handlers.LoggingHandlers;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
 
 import java.util.logging.Level;
 
@@ -16,9 +14,6 @@ public class WebhookConnector {
 
     private String webhookUrl = "";
     private Embed[] embeds = null;
-
-    Logger logger = ChatToDiscord.LOGGER;
-    Logger debug = ChatToDiscord.DEBUG;
 
     Callback callback;
     private PlainMessage message;
@@ -39,9 +34,7 @@ public class WebhookConnector {
         if (isValidUrl) {
             this.webhookUrl = webhookUrl;
         } else {
-            if (!Manager.getConfig().suppress_warns) {
-                logger.error("[Discord] Invalid webhook URL: {}", webhookUrl);
-            }
+            LoggingHandlers.error(String.format("[Discord] Invalid webhook URL: %s", webhookUrl));
         }
 
         // Return the updated instance of WebhookManager.
@@ -96,9 +89,7 @@ public class WebhookConnector {
         WebhookClient wc = new WebhookClient(callback);
         wc.send(webhookUrl, obj);
 
-        if (Manager.getConfig().debug_mode) {
-            debug.info("WebhookConnector executed.");
-        }
+        LoggingHandlers.debug("WebhookConnector executed.");
 
         return this;
     }
@@ -141,9 +132,7 @@ public class WebhookConnector {
         java.util.logging.Logger s_logger = java.util.logging.Logger.getLogger(WebhookConnector.class.getName());
         s_logger.log(Level.SEVERE, "JSON Error: ", exception);
 
-        if (Manager.getConfig().debug_mode&&!Manager.getConfig().suppress_warns) {
-            debug.error("[JSON] Error: {}", exception.getMessage());
-        }
+        LoggingHandlers.debugWarning(String.format("[JSON] Error: %s", exception.getMessage()));
 
         if (callback != null) {
             callback.onFailure(-1, exception.getMessage());

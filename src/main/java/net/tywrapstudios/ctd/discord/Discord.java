@@ -5,7 +5,6 @@ import com.pastebin.api.Format;
 import com.pastebin.api.PastebinClient;
 import com.pastebin.api.Visibility;
 import com.pastebin.api.request.PasteRequest;
-import net.tywrapstudios.ctd.ChatToDiscord;
 import net.tywrapstudios.ctd.config.Manager;
 import net.tywrapstudios.ctd.config.config.Config;
 import net.tywrapstudios.ctd.discord.messagetypes.Embed;
@@ -13,14 +12,12 @@ import net.tywrapstudios.ctd.discord.messagetypes.PlainMessage;
 import net.tywrapstudios.ctd.discord.resources.Footer;
 import net.tywrapstudios.ctd.discord.webhook.WebhookClient;
 import net.tywrapstudios.ctd.discord.webhook.WebhookConnector;
-import org.slf4j.Logger;
+import net.tywrapstudios.ctd.handlers.LoggingHandlers;
 
 import java.util.Objects;
 
 public class Discord {
     static Config config = Manager.getConfig();
-    static Logger logger = ChatToDiscord.LOGGER;
-    static Logger debug = ChatToDiscord.DEBUG;
     static String key = config.pastebin_api_key;
 
     public static void sendLiteralToDiscord(String message, boolean embedMode, String webhookUrl) {
@@ -152,14 +149,13 @@ public class Discord {
     }
 
     private static void logSuccess(String playerName, String UUID, String chatMessage) {
-        if (config.debug_mode) {
-            debug.info("[{}[{}]: {}]", playerName, UUID, chatMessage);
-        }
+        String log = String.format("[%s[%s]: %s]", playerName, UUID, chatMessage);
+        LoggingHandlers.debug(log);
     }
     private static void logFailure(String chatMessage, int statusCode, String errorMessage, String playerName, String UUID) {
         if (!config.suppress_warns) {
-            logger.warn("Message \"{}\" by {}[{}] failed to send. ", chatMessage, playerName, UUID);
-            logger.warn("Code: {} Error: {}", statusCode, errorMessage);
+            LoggingHandlers.warn(String.format("Message \"%s\" by %s[%s] failed to send. ", chatMessage, playerName, UUID));
+            LoggingHandlers.warn(String.format("Code: %s Error: %s", statusCode, errorMessage));
         }
     }
 }

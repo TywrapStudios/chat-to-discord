@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.tywrapstudios.ctd.ChatToDiscord;
 import net.tywrapstudios.ctd.config.Manager;
-import org.slf4j.Logger;
+import net.tywrapstudios.ctd.handlers.LoggingHandlers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +21,6 @@ public abstract class ReloadMyConfig {
             at = @At(value = "HEAD")
     )
     private static void pekilog$ReloadMyConfig(CommandContext context, CallbackInfoReturnable<Integer> cir) {
-        Logger logger = ChatToDiscord.LOGGER;
         ServerCommandSource source = (ServerCommandSource) context.getSource();
         if (Objects.equals(Manager.getConfig().CONFIG_DO_NOT_TOUCH, ChatToDiscord.CONFIG_V)) {
             Manager.reloadConfig(context);
@@ -30,7 +29,7 @@ public abstract class ReloadMyConfig {
                 return Text.literal("[ChatToDiscord] Could not reload CTD Config: Version out of sync, please delete your config file and rerun Minecraft.").formatted(Formatting.DARK_RED);
             }, false);
             if (!Manager.getConfig().suppress_warns) {
-                logger.error("[Config] Your Config Version is out of Sync, please delete your config file and reload Minecraft.");
+                LoggingHandlers.error("[Config] Your Config Version is out of Sync, please delete your config file and reload Minecraft.");
             }
         }
     }

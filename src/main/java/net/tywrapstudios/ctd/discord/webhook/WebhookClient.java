@@ -1,9 +1,7 @@
 package net.tywrapstudios.ctd.discord.webhook;
 
-import net.tywrapstudios.ctd.ChatToDiscord;
-import net.tywrapstudios.ctd.config.Manager;
+import net.tywrapstudios.ctd.handlers.LoggingHandlers;
 import org.json.JSONObject;
-import org.slf4j.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -23,9 +21,6 @@ public class WebhookClient {
     public WebhookClient(Callback callback) {
         this.callback = callback;
     }
-
-    Logger logger = ChatToDiscord.LOGGER;
-    Logger debug = ChatToDiscord.DEBUG;
 
     /**
      * Sends a message to a specified webhook URL.
@@ -54,9 +49,7 @@ public class WebhookClient {
 
             // Get the HTTP response code
             int responseCode = connection.getResponseCode();
-            if (Manager.getConfig().debug_mode) {
-                debug.info("[CTD] Response Code: {}", responseCode);
-            }
+            LoggingHandlers.debug(String.format("[CTD] Response Code: %s", responseCode));
 
             // Handle response based on response code
             if (responseCode == HttpsURLConnection.HTTP_OK || responseCode == HttpsURLConnection.HTTP_NO_CONTENT) {
@@ -65,9 +58,7 @@ public class WebhookClient {
                 handleErrorResponse(connection, responseCode);
             }
         } catch (IOException | URISyntaxException e) {
-            if (!Manager.getConfig().suppress_warns) {
-                logger.error("[I/O] Error: {}", e.getMessage());
-            }
+            LoggingHandlers.error(String.format("[CTD] Error: %s", e.getMessage()));
             callback.onFailure(-1, e.getMessage());
         }
     }

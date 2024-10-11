@@ -3,9 +3,11 @@ package net.tywrapstudios.ctd.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.tywrapstudios.ctd.ChatToDiscord;
 import net.tywrapstudios.ctd.config.config.Config;
 import net.tywrapstudios.ctd.config.config.Data;
+import net.tywrapstudios.ctd.handlers.LoggingHandlers;
 import org.slf4j.Logger;
 
 import java.io.*;
@@ -19,8 +21,6 @@ public class Manager {
 
     private static Config CONFIG;
 
-    protected static Logger logger = ChatToDiscord.LOGGER;
-
     public static Config getConfig() {
         return CONFIG;
     }
@@ -33,7 +33,7 @@ public class Manager {
         }
         catch(IOException exception) {
             CONFIG = oldConfig;
-            logger.warn("[Config] Something went wrong while reading config!");
+            LoggingHandlers.warn("[Config] Something went wrong while reading config!");
         }
     }
 
@@ -42,14 +42,12 @@ public class Manager {
 
         CONFIG = null;
         try {
-            logger.info("[Config] Reloading config...");
+            LoggingHandlers.info("[Config] Reloading config...");
             ensureConfig("Successfully Reloaded Config file.");
         }
         catch(IOException exception) {
             CONFIG = oldConfig;
-            if (!getConfig().suppress_warns) {
-                logger.error("[Config] Something went wrong while reloading Config!");
-            }
+            LoggingHandlers.error("[Config] Something went wrong while reloading Config!");
         }
     }
 
@@ -70,7 +68,6 @@ public class Manager {
             writer.write(GSON_OBJECT.toJson(data));
             writer.close();
         }
-        logger.info("[Config] {}", logMessage);
+        LoggingHandlers.info(String.format("[Config] %s", logMessage));
     }
-
 }

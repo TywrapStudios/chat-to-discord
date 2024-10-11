@@ -1,6 +1,7 @@
 package net.tywrapstudios.ctd.handlers;
 
 import net.tywrapstudios.ctd.ChatToDiscord;
+import net.tywrapstudios.ctd.compat.DiscordSafety;
 import net.tywrapstudios.ctd.config.Manager;
 import net.tywrapstudios.ctd.config.config.Config;
 import net.tywrapstudios.ctd.discord.Discord;
@@ -14,21 +15,19 @@ public class Handlers {
         Config config = Manager.getConfig();
         List<String> webhookUrls = config.discord_webhooks;
 
-        messageStr = Compat.handleCompat(messageStr);
+        messageStr = CompatHandlers.handleCompat(messageStr);
 
-        String authorNamed = authorName.replace("_","\\_");
         if (!webhookUrls.isEmpty()) {
             for (String url : webhookUrls) {
                 if (!config.embed_mode) {
-                    Discord.sendChatMessageToDiscord(messageStr, authorNamed, url, authorUUID);
+                    authorName = DiscordSafety.modifyToNegateMarkdown(authorName);
+                    Discord.sendChatMessageToDiscord(messageStr, authorName, url, authorUUID);
                 } else {
                     Discord.sendEmbedToDiscord(messageStr, authorName, url, authorUUID, config.embed_color_rgb_int);
                 }
             }
         } else {
-            if (!config.suppress_warns) {
-                ChatToDiscord.LOGGER.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
-            }
+            LoggingHandlers.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
         }
     }
 
@@ -45,20 +44,19 @@ public class Handlers {
     public static void handleGameMessage(String message) {
         Config config = Manager.getConfig();
         boolean embedMode = config.embed_mode;
-        String messageFin = message;
         List<String> webhookUrls = config.discord_webhooks;
+
+        message = CompatHandlers.handleCompat(message);
         if (!config.only_send_messages) {
             if (!embedMode) {
-                messageFin = "**" + messageFin + "**";
+                message = "**" + message + "**";
             }
             if (!webhookUrls.isEmpty()) {
                 for (String url : webhookUrls) {
-                    Discord.sendLiteralToDiscord(messageFin, embedMode, url);
+                    Discord.sendLiteralToDiscord(message, embedMode, url);
                 }
             } else {
-                if (!config.suppress_warns) {
-                    ChatToDiscord.LOGGER.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
-                }
+                LoggingHandlers.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
             }
         }
     }
