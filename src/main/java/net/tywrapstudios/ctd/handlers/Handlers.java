@@ -1,6 +1,5 @@
 package net.tywrapstudios.ctd.handlers;
 
-import net.tywrapstudios.ctd.ChatToDiscord;
 import net.tywrapstudios.ctd.compat.DiscordSafety;
 import net.tywrapstudios.ctd.config.Manager;
 import net.tywrapstudios.ctd.config.config.Config;
@@ -16,11 +15,13 @@ public class Handlers {
         List<String> webhookUrls = config.discord_webhooks;
 
         messageStr = CompatHandlers.handleCompat(messageStr);
+        if (!config.embed_mode) {
+            authorName = DiscordSafety.modifyToNegateMarkdown(authorName);
+        }
 
         if (!webhookUrls.isEmpty()) {
             for (String url : webhookUrls) {
                 if (!config.embed_mode) {
-                    authorName = DiscordSafety.modifyToNegateMarkdown(authorName);
                     Discord.sendChatMessageToDiscord(messageStr, authorName, url, authorUUID);
                 } else {
                     Discord.sendEmbedToDiscord(messageStr, authorName, url, authorUUID, config.embed_color_rgb_int);
