@@ -25,7 +25,7 @@ public class ChatToDiscord implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("CTD");
 	public static final Logger DEBUG = LoggerFactory.getLogger("CTD-Debug");
 	public static final String CONFIG_V = "1.1";
-	public static final String MOD_V = "1.3.0";
+	public static final String MOD_V = "1.3.1";
 
 	@Override
 	public void onInitialize() {
