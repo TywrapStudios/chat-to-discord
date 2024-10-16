@@ -12,6 +12,7 @@ But that's not all this mod does! It has a few other features that other mods li
 - Before your message is sent, it goes through some needed Compatibility handlers, which most mods lack:
   - Your message is modified to negate global pings (e.g. `@everyone`).
   - Your message is modified to negate invite links.
+  - Your message is modified to negate any role pings that you don't allow in Config.
   - Your message and player names in it are modified to bypass Discord's native Markdown features (such as _Cursive text_).
   - When sharing a waypoint using Xaero's Mini-/Worldmap it displays a very "weird" message, this message can actually be deciphered using some smart Java magic and this mod rewrites your message to be more legible.
 - A fully fletched way to send stuff to a Webhook, for addon Creators.
@@ -22,7 +23,7 @@ But that's not all this mod does! It has a few other features that other mods li
 ### A very simple Config System is also included!:
 ```json5
 {
-  "CONFIG_DO_NOT_TOUCH": "1.1", // Important internal stuff, dw about it.
+  "CONFIG_DO_NOT_TOUCH": "1.2", // Important internal stuff, dw about it.
   "c0": "After you've changed any of the values in this file, you can run /reload to apply changes in-game.",
   "discord_webhooks": [], // This is where the webhook links are defined. "<link>"
   "only_send_messages": false, // Whether to not send Game messages but only chat.
@@ -34,7 +35,9 @@ But that's not all this mod does! It has a few other features that other mods li
   "c3": "Use this site if you want to use this feature:",
   "c4": "http://www.shodor.org/~efarrow/trunk/html/rgbint.html",
   "embed_color_rgb_int": 5489270, // Defines the main colour of the embeds.
-  "c5": "Set this to true if you wish not to receive LOGGER.error messages. NOT RECOMMENDED!!",
+  "c5": "A list of role ID's that users are allowed to ping from MC.",
+  "role_ids": [], // A list of role IDs in form of Strings that are allowed to be pinged.
+  "c6": "Set this to true if you wish not to receive LOGGER.error messages. NOT RECOMMENDED!!",
   "suppress_warns": false // Whether to suppress warn messages. (for if you get spammed)
 }
 ```
