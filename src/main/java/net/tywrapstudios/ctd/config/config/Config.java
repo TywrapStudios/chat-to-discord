@@ -17,6 +17,8 @@ public class Config {
     public final String pastebin_api_key;
     // Embed Colour;
     public final int embed_color_rgb_int;
+    // Allowed role ID's;
+    public final List<String> role_ids;
     // Suppress Warnings;
     public boolean suppress_warns;
 
@@ -28,6 +30,7 @@ public class Config {
         this.embed_mode = data.embed_mode;
         this.pastebin_api_key = data.pastebin_api_key;
         this.embed_color_rgb_int = data.embed_color_rgb_int;
+        this.role_ids = data.role_ids;
         this.suppress_warns = data.suppress_warns;
     }
 }

@@ -1,13 +1,41 @@
 package net.tywrapstudios.ctd.compat;
 
+import net.tywrapstudios.ctd.config.Manager;
+
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class DiscordSafety {
     public static String modifyToNegateDangerousPings(String message) {
-        if (!message.contains("@everyone")&&!message.contains("@here")) {
+        if (!message.contains("@everyone")&&!message.contains("@here")&&!message.contains("<@&")) {
             return message;
         }
         message = message.replace("@everyone", "`@everyone`[ping negated]");
         message = message.replace("@here", "`@here`[ping negated]");
+        message = modifyForRoleMentions(message);
         return message;
+    }
+
+    public static String modifyForRoleMentions(String message) {
+        List<String> allowedRoles = Manager.getConfig().role_ids;
+        Pattern pattern = Pattern.compile("<@&(\\d+)>");
+        Matcher matcher = pattern.matcher(message);
+
+        StringBuilder modifiedMessage = new StringBuilder();
+
+        while (matcher.find()) {
+            String roleId = matcher.group(1);
+
+            if (allowedRoles.contains(roleId)) {
+                matcher.appendReplacement(modifiedMessage, "<@&" + roleId + ">");
+            } else {
+                matcher.appendReplacement(modifiedMessage, "`" + roleId + "`[ping negated]");
+            }
+        }
+
+        matcher.appendTail(modifiedMessage);
+        return modifiedMessage.toString();
     }
 
     public static String modifyToNegateInviteLinks(String message) {
