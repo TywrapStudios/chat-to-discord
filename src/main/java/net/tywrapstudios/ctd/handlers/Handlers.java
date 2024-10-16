@@ -20,7 +20,7 @@ public class Handlers {
         }
 
         if (!webhookUrls.isEmpty()) {
-            if (!Objects.equals(authorName, "Server")&&!Objects.equals(authorName, "Rcon")) {
+            if (!Objects.equals(authorName, "Rcon")) {
                 for (String url : webhookUrls) {
                     if (!config.embed_mode) {
                         Discord.sendChatMessageToDiscord(messageStr, authorName, url, authorUUID);
