@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.tywrapstudios.ctd.command.CTDCommand;
@@ -40,6 +41,15 @@ public class ChatToDiscord implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STOPPING.register(this::onServerStop);
 		ServerMessageEvents.CHAT_MESSAGE.register(this::onChatMessage);
 		ServerMessageEvents.GAME_MESSAGE.register(this::onGameMessage);
+		ServerMessageEvents.COMMAND_MESSAGE.register(this::onCommandMessage);
+	}
+
+	private void onCommandMessage(SignedMessage signedMessage, ServerCommandSource serverCommandSource, MessageType.Parameters parameters) {
+		String message = signedMessage.getContent().getString();
+		String authorUUID = signedMessage.getSender().toString();
+		String authorName = serverCommandSource.getName();
+
+		Handlers.handleChatMessage(message, authorUUID, authorName);
 	}
 
 	private void onGameMessage(MinecraftServer minecraftServer, Text text, boolean b) {

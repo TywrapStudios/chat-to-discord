@@ -20,12 +20,16 @@ public class Handlers {
         }
 
         if (!webhookUrls.isEmpty()) {
-            for (String url : webhookUrls) {
-                if (!config.embed_mode) {
-                    Discord.sendChatMessageToDiscord(messageStr, authorName, url, authorUUID);
-                } else {
-                    Discord.sendEmbedToDiscord(messageStr, authorName, url, authorUUID, config.embed_color_rgb_int);
+            if (!Objects.equals(authorName, "Server")&&!Objects.equals(authorName, "Rcon")) {
+                for (String url : webhookUrls) {
+                    if (!config.embed_mode) {
+                        Discord.sendChatMessageToDiscord(messageStr, authorName, url, authorUUID);
+                    } else {
+                        Discord.sendEmbedToDiscord(messageStr, authorName, url, authorUUID, config.embed_color_rgb_int);
+                    }
                 }
+            } else {
+                LoggingHandlers.debug("The sender was the Server or a Remote Console (RCON).");
             }
         } else {
             LoggingHandlers.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
