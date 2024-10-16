@@ -38,15 +38,16 @@ But that's not all this mod does! It has a few other features that other mods li
   "suppress_warns": false // Whether to suppress warn messages. (for if you get spammed)
 }
 ```
-> [!INFO]
+(This code block was syntaxed with `json5` for the sake of comments, the actual file is written in `json`)
+> [!NOTE]
 > This file can be found at `./config/ctd.json`.
 ---
 ### Extra info:
 > [!IMPORTANT]
-> It is suggested to completely whitelist the Webhook for your Auto-Moderation bots.
+> It is suggested to completely whitelist the Webhook for your Auto-Moderation bots.  
 > Why whitelist? For starters, most bots will flag it as "spamming" since the playername is always included in the message, and thus repeated a few times, whitelisting the Webhook solves the hassle of having to remake it every time your bot deletes it.  
 
-> [!INFO]
+> [!NOTE]
 > All the code and other stuff in this repository is licensed under the MIT License.  
 > The only Exceptions are everything that can be found in `/main/resources/assets/ctd/*`, such as the Mod icon, this is all licensed under **ARR, All Rights Reserved Unless Explicitly stated.**  
 > A separate LICENSE file can be found in there as well.
