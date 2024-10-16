@@ -6,6 +6,7 @@ But that's not all this mod does! It has a few other features that other mods li
 ### So, just for good measure, let's list all the features in this mod (in no particular order):
 - Sending Player Messages directly to the Webhook.
 - Sending Game Messages (e.g. Deaths, Advancements) directly to the Webhook.
+- Sending Command Messages (e.g. /say) directly to the Webhook.
 - Sending a Start and Stop message for the respective server lifecycle events.
 - The `/ctd` command, which displays info about your current settings and the mod!
 - Alongside that, `/ctd reload` reloads your config without the need of a laggy vanilla /reload!
