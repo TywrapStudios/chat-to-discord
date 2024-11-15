@@ -1,12 +1,10 @@
 package net.tywrapstudios.ctd.discord;
 
-import com.pastebin.api.Expiration;
-import com.pastebin.api.Format;
-import com.pastebin.api.PastebinClient;
-import com.pastebin.api.Visibility;
-import com.pastebin.api.request.PasteRequest;
-import net.tywrapstudios.ctd.config.Manager;
-import net.tywrapstudios.ctd.config.config.Config;
+import gs.mclo.api.MclogsClient;
+import gs.mclo.api.response.UploadLogResponse;
+import net.fabricmc.loader.api.FabricLoader;
+import net.tywrapstudios.ctd.config.Config;
+import net.tywrapstudios.ctd.config.ConfigManager;
 import net.tywrapstudios.ctd.discord.messagetypes.Embed;
 import net.tywrapstudios.ctd.discord.messagetypes.PlainMessage;
 import net.tywrapstudios.ctd.discord.resources.Footer;
@@ -14,11 +12,12 @@ import net.tywrapstudios.ctd.discord.webhook.WebhookClient;
 import net.tywrapstudios.ctd.discord.webhook.WebhookConnector;
 import net.tywrapstudios.ctd.handlers.LoggingHandlers;
 
-import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+
+import static net.tywrapstudios.ctd.ChatToDiscord.MCL;
 
 public class Discord {
-    static Config config = Manager.getConfig();
-    static String key = config.pastebin_api_key;
+    static Config config = ConfigManager.config;
 
     public static void sendLiteralToDiscord(String message, boolean embedMode, String webhookUrl) {
         if (!embedMode) {
@@ -42,7 +41,7 @@ public class Discord {
         } else {
             Footer footer = new Footer(message,"https://media.discordapp.net/attachments/1249069998148812930/1293350885837242388/minecraft_logo.png?ex=67070e60&is=6705bce0&hm=33b6d9a9ed182dc00bf080fbfa344a9f27781fde92d9cc9f4d4cfcc54ef40d47&=&format=webp&quality=lossless&width=889&height=889");
             Embed embed = new Embed()
-                    .setColor(config.embed_color_rgb_int)
+                    .setColor(config.discord_config.embed_color_rgb_int)
                     .setFooter(footer);
             PlainMessage embedMessage = new PlainMessage()
                     .setContent("");
@@ -109,21 +108,15 @@ public class Discord {
                 .exec();
     }
 
-    public static void sendCrashEmbed(String cause, int embedColor, String webhookUrl, String stack) {
-        PasteRequest request = PasteRequest
-                .content(stack)
-                .visibility(Visibility.UNLISTED)
-                .name("Crash with: "+cause)
-                .expiration(Expiration.ONE_DAY)
-                .format(Format.LOGTALK)
-                .build();
-        PastebinClient client = PastebinClient.builder().developerKey(key).build();
-        String url = client.paste(request);
-        String $1 = "**No Pastebin API Key Defined!**\n**Please Configure a Key in the Config file: __ctd.json__**";
-        if (!Objects.equals(config.pastebin_api_key, "")) {
-            $1 = "### \uD83D\uDD17 [STACKTRACE](<"+url+">)";
-        }
-        String description = "**Minecraft crashed with the following given cause:**\n```\n"+cause+"\n```\n\n"+$1;
+    public static void sendCrashEmbed(String cause, int embedColor, String webhookUrl, String stack) throws ExecutionException, InterruptedException {
+        MCL.setMinecraftVersion(FabricLoader.getInstance().getModContainer("minecraft").orElseThrow().getMetadata().getVersion().getFriendlyString());
+        UploadLogResponse response = MCL.uploadLog(stack).get();
+        response.setClient(MCL);
+        String description = String.format("""
+                **Minecraft crashed with the following given cause:**
+                [`%s`]
+                **Stacktrace:**
+                [[`%s`](<%s>)]""", cause, response.getUrl().replace("https://mclo.gs/", "mclo.gs: "), response.getUrl());
         Embed embed = new Embed()
                 .setColor(embedColor)
                 .setTitle("MINECRAFT EXPERIENCED AN EXCEPTION!")
@@ -153,7 +146,7 @@ public class Discord {
         LoggingHandlers.debug(log);
     }
     private static void logFailure(String chatMessage, int statusCode, String errorMessage, String playerName, String UUID) {
-        if (!config.suppress_warns) {
+        if (!config.util_config.suppress_warns) {
             LoggingHandlers.warn(String.format("Message \"%s\" by %s[%s] failed to send. ", chatMessage, playerName, UUID));
             LoggingHandlers.warn(String.format("Code: %s Error: %s", statusCode, errorMessage));
         }

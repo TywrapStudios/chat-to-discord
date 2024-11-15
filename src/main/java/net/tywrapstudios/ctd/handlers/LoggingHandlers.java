@@ -1,8 +1,8 @@
 package net.tywrapstudios.ctd.handlers;
 
 import net.tywrapstudios.ctd.ChatToDiscord;
-import net.tywrapstudios.ctd.config.Manager;
-import net.tywrapstudios.ctd.config.config.Config;
+import net.tywrapstudios.ctd.config.Config;
+import net.tywrapstudios.ctd.config.ConfigManager;
 import org.slf4j.Logger;
 
 public class LoggingHandlers {
@@ -14,29 +14,29 @@ public class LoggingHandlers {
     }
 
     public static void warn(String message) {
-        Config config = Manager.getConfig();
-        if (!config.suppress_warns) {
+        Config config = ConfigManager.config;
+        if (!config.util_config.suppress_warns) {
             logger.warn(message);
         }
     }
 
     public static void error(String message) {
-        Config config = Manager.getConfig();
-        if (!config.suppress_warns) {
+        Config config = ConfigManager.config;
+        if (!config.util_config.suppress_warns) {
             logger.error(message);
         }
     }
 
     public static void debug(String message) {
-        Config config = Manager.getConfig();
-        if (config.debug_mode) {
+        Config config = ConfigManager.config;
+        if (config.util_config.debug_mode) {
             debug.info(message);
         }
     }
 
     public static void debugWarning(String message) {
-        Config config = Manager.getConfig();
-        if (config.debug_mode&&!config.suppress_warns) {
+        Config config = ConfigManager.config;
+        if (config.util_config.debug_mode && !config.util_config.suppress_warns) {
             debug.warn(message);
         }
     }
