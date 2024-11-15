@@ -24,25 +24,32 @@ But that's not all this mod does! It has a few other features that other mods li
 ### A very simple Config System is also included!:
 ```json5
 {
-  "CONFIG_DO_NOT_TOUCH": "1.2", // Important internal stuff, dw about it.
-  "c0": "After you've changed any of the values in this file, you can run /reload to apply changes in-game.",
-  "discord_webhooks": [], // This is where the webhook links are defined. "<link>"
-  "only_send_messages": false, // Whether to not send Game messages but only chat.
-  "debug_mode": false, // Whether to display debug info in logs.
-  "embed_mode": false, // Whether to use Embeds in rather than plain messages.
-  "c1": "Please provide your own Pastebin API key from https://pastebin.com/doc_api#1",
-  "pastebin_api_key": "", // A Pastebin API key, this is (for now) needed.
-  "c2": "The setting below must be an RGB int, so not a `255, 255, 255` type of thing.",
-  "c3": "Use this site if you want to use this feature:",
-  "c4": "http://www.shodor.org/~efarrow/trunk/html/rgbint.html",
-  "embed_color_rgb_int": 5489270, // Defines the main colour of the embeds.
-  "c5": "A list of role ID's that users are allowed to ping from MC.",
-  "role_ids": [], // A list of role IDs in form of Strings that are allowed to be pinged.
-  "c6": "Set this to true if you wish not to receive LOGGER.error messages. NOT RECOMMENDED!!",
-  "suppress_warns": false // Whether to suppress warn messages. (for if you get spammed)
+  "format_version": "2.0",
+  // All configurations for the Discord integration.
+  "discord_config": {
+    // A list of webhooks in Strings that the mod will send messages to. eg: "https://discord.com/api/webhooks/..."
+    "discord_webhooks": [],
+    // Whether to only send player messages to Discord, and not game related messages (e.g. join/leave messages, deaths, etc.).
+    "only_send_messages": false,
+    // Whether to send messages as an embed. If false, messages will be sent as plain text.
+    "embed_mode": false,
+    /* The setting below must be an RGB int, so not a `255, 255, 255` type of thing.
+       Use this site if you want to use this feature:
+       http://www.shodor.org/~efarrow/trunk/html/rgbint.html
+    */
+    "embed_color_rgb_int": 5489270,
+    // A list of role ID's in Strings that users are allowed to ping from MC. e.g. "123456789012345678"
+    "role_ids": []
+  },
+  // Several configurations for utility features.
+  "util_config": {
+    // Whether to display debug information in the console.
+    "debug_mode": false,
+    // Whether to suppress all warnings from this mod. NOT RECOMMENDED.
+    "suppress_warns": false
+  }
 }
 ```
-(This code block was syntaxed with `json5` for the sake of comments, the actual file is written in `json`)
 > [!NOTE]
 > This file can be found at `./config/ctd.json`.
 ---
