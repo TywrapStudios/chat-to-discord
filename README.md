@@ -51,7 +51,7 @@ But that's not all this mod does! It has a few other features that other mods li
 }
 ```
 > [!NOTE]
-> This file can be found at `./config/ctd.json`.
+> This file can be found at `.../config/ctd.json5`.
 ---
 ### Extra info:
 > [!IMPORTANT]
