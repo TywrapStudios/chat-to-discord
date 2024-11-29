@@ -19,7 +19,7 @@ But that's not all this mod does! It has a few other features that other mods li
 - A fully fletched way to send stuff to a Webhook, for addon Creators.
 - A more robust way of handling logging, falling in line with options in Config.
 - The Config gets reloaded even when the vanilla /reload command is run.
-- If the server crashes, a specialized embed will be sent, displaying the main cause, and also linking to an automatically made Pastebin Site! Hence, the need to specify a Pastebin Key.
+- If the server crashes, a specialized embed will be sent, displaying the main cause, and also linking to an automatically made Mclogs Site!
 ---
 ### A very simple Config System is also included!:
 ```json5

@@ -1,6 +1,7 @@
 package net.tywrapstudios.ctd.config;
 
 import blue.endless.jankson.Comment;
+import net.tywrapstudios.blossombridge.api.config.AbstractConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * <br/>
  * <br/> DON'T FORGET TO TRANSFER NEW DETAILS OVER TO {@code README}
  */
-public class Config {
+public class Config extends AbstractConfig {
     public String format_version = "2.0";
     @Comment("All configurations for the Discord integration.")
     public DiscordConfig discord_config = new DiscordConfig();

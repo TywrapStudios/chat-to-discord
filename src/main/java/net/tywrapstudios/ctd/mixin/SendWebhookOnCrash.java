@@ -1,8 +1,8 @@
 package net.tywrapstudios.ctd.mixin;
 
 import net.minecraft.util.crash.CrashReport;
+import net.tywrapstudios.ctd.ChatToDiscord;
 import net.tywrapstudios.ctd.handlers.Handlers;
-import net.tywrapstudios.ctd.handlers.LoggingHandlers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,13 +19,13 @@ public abstract class SendWebhookOnCrash {
 
     @Inject(method = "writeToFile(Ljava/io/File;)Z",
             at = @At(value = "HEAD"))
-    private void ctd$sendWebhookOnCrash(File file, CallbackInfoReturnable<Boolean> cir) throws ExecutionException, InterruptedException {
+    private void ctd$sendWebhookOnCrash(File file, CallbackInfoReturnable<Boolean> cir) {
         String cause = getMessage();
         String stack = getStackTrace();
         try {
             Handlers.handleCrash(cause, stack);
         } catch (Exception e) {
-            LoggingHandlers.error("An error occurred while trying to send the crash report to Discord. Please check the logs for more information.");
+            ChatToDiscord.LOGGING.error("An error occurred while trying to send the crash report to Discord. Please check the logs for more information.");
             e.printStackTrace();
         }
     }

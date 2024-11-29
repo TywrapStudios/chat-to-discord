@@ -1,24 +1,19 @@
 package net.tywrapstudios.ctd.discord;
 
-import gs.mclo.api.MclogsClient;
 import gs.mclo.api.response.UploadLogResponse;
 import net.fabricmc.loader.api.FabricLoader;
-import net.tywrapstudios.ctd.config.Config;
-import net.tywrapstudios.ctd.config.ConfigManager;
+import net.tywrapstudios.ctd.ChatToDiscord;
 import net.tywrapstudios.ctd.discord.messagetypes.Embed;
 import net.tywrapstudios.ctd.discord.messagetypes.PlainMessage;
 import net.tywrapstudios.ctd.discord.resources.Footer;
 import net.tywrapstudios.ctd.discord.webhook.WebhookClient;
 import net.tywrapstudios.ctd.discord.webhook.WebhookConnector;
-import net.tywrapstudios.ctd.handlers.LoggingHandlers;
 
 import java.util.concurrent.ExecutionException;
 
 import static net.tywrapstudios.ctd.ChatToDiscord.MCL;
 
 public class Discord {
-    static Config config = ConfigManager.config;
-
     public static void sendLiteralToDiscord(String message, boolean embedMode, String webhookUrl) {
         if (!embedMode) {
             PlainMessage literalMessage = new PlainMessage()
@@ -41,7 +36,7 @@ public class Discord {
         } else {
             Footer footer = new Footer(message,"https://media.discordapp.net/attachments/1249069998148812930/1293350885837242388/minecraft_logo.png?ex=67070e60&is=6705bce0&hm=33b6d9a9ed182dc00bf080fbfa344a9f27781fde92d9cc9f4d4cfcc54ef40d47&=&format=webp&quality=lossless&width=889&height=889");
             Embed embed = new Embed()
-                    .setColor(config.discord_config.embed_color_rgb_int)
+                    .setColor(ChatToDiscord.CONFIG_MANAGER.getConfig().discord_config.embed_color_rgb_int)
                     .setFooter(footer);
             PlainMessage embedMessage = new PlainMessage()
                     .setContent("");
@@ -143,12 +138,12 @@ public class Discord {
 
     private static void logSuccess(String playerName, String UUID, String chatMessage) {
         String log = String.format("[%s[%s]: %s]", playerName, UUID, chatMessage);
-        LoggingHandlers.debug(log);
+        ChatToDiscord.LOGGING.debug(log);
     }
     private static void logFailure(String chatMessage, int statusCode, String errorMessage, String playerName, String UUID) {
-        if (!config.util_config.suppress_warns) {
-            LoggingHandlers.warn(String.format("Message \"%s\" by %s[%s] failed to send. ", chatMessage, playerName, UUID));
-            LoggingHandlers.warn(String.format("Code: %s Error: %s", statusCode, errorMessage));
+        if (!ChatToDiscord.CONFIG_MANAGER.getConfig().util_config.suppress_warns) {
+            ChatToDiscord.LOGGING.warn(String.format("Message \"%s\" by %s[%s] failed to send. ", chatMessage, playerName, UUID));
+            ChatToDiscord.LOGGING.warn(String.format("Code: %s Error: %s", statusCode, errorMessage));
         }
     }
 }

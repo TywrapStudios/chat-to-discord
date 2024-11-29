@@ -1,9 +1,9 @@
 package net.tywrapstudios.ctd.discord.webhook;
 
+import net.tywrapstudios.ctd.ChatToDiscord;
 import net.tywrapstudios.ctd.discord.messagetypes.Embed;
 import net.tywrapstudios.ctd.discord.messagetypes.PlainMessage;
 import net.tywrapstudios.ctd.discord.webhook.WebhookClient.Callback;
-import net.tywrapstudios.ctd.handlers.LoggingHandlers;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +34,7 @@ public class WebhookConnector {
         if (isValidUrl) {
             this.webhookUrl = webhookUrl;
         } else {
-            LoggingHandlers.error(String.format("[Discord] Invalid webhook URL: %s", webhookUrl));
+            ChatToDiscord.LOGGING.error(String.format("[Discord] Invalid webhook URL: %s", webhookUrl));
         }
 
         // Return the updated instance of WebhookManager.
@@ -89,7 +89,7 @@ public class WebhookConnector {
         WebhookClient wc = new WebhookClient(callback);
         wc.send(webhookUrl, obj);
 
-        LoggingHandlers.debug("WebhookConnector executed.");
+        ChatToDiscord.LOGGING.debug("WebhookConnector executed.");
 
         return this;
     }
@@ -132,7 +132,7 @@ public class WebhookConnector {
         java.util.logging.Logger s_logger = java.util.logging.Logger.getLogger(WebhookConnector.class.getName());
         s_logger.log(Level.SEVERE, "JSON Error: ", exception);
 
-        LoggingHandlers.debugWarning(String.format("[JSON] Error: %s", exception.getMessage()));
+        ChatToDiscord.LOGGING.debugWarning(String.format("[JSON] Error: %s", exception.getMessage()));
 
         if (callback != null) {
             callback.onFailure(-1, exception.getMessage());

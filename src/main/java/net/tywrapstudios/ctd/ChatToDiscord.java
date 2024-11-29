@@ -14,34 +14,40 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.tywrapstudios.blossombridge.api.config.ConfigManager;
+import net.tywrapstudios.blossombridge.api.logging.LoggingHandler;
 import net.tywrapstudios.ctd.command.CTDCommand;
 import net.tywrapstudios.ctd.config.Config;
-import net.tywrapstudios.ctd.config.ConfigManager;
 import net.tywrapstudios.ctd.handlers.Handlers;
-import net.tywrapstudios.ctd.handlers.LoggingHandlers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public class ChatToDiscord implements ModInitializer {
-	public static final Logger LOGGER = LoggerFactory.getLogger("CTD");
-	public static final Logger DEBUG = LoggerFactory.getLogger("CTD-Debug");
-	public static final String CONFIG_V = "2.0";
+	public static final ConfigManager<Config> CONFIG_MANAGER =
+			new ConfigManager<>(Config.class, new File(FabricLoader.getInstance().getConfigDir().toFile(),
+					"ctd.json5"));
+	public static String CONFIG_V;
 	public static final String MOD_V = FabricLoader.getInstance().getModContainer("ctd").orElseThrow().getMetadata().getVersion().getFriendlyString();
 	public static final MclogsClient MCL = new MclogsClient("Chat To Discord");
 
+	public static LoggingHandler<Config> LOGGING;
+
 	@Override
 	public void onInitialize() {
-		LOGGER.info("[CTD] CTD Loading up.");
+		LOGGING = new LoggingHandler<>("CTD", CONFIG_MANAGER.getConfig());
+		LOGGING.info("[CTD] CTD Loading up.");
 
 		Optional<ModContainer> ctdModContainer = FabricLoader.getInstance().getModContainer("ctd");
 
 		MCL.setProjectVersion(ctdModContainer.isPresent() ? ctdModContainer.get().getMetadata().getVersion().getFriendlyString() : "unknown");
 
-		ConfigManager.loadConfig();
+		CONFIG_V  = "2.0";
+		CONFIG_MANAGER.loadConfig();
 		registerCTDCommand();
 
 		initializeCTD();
@@ -82,30 +88,30 @@ public class ChatToDiscord implements ModInitializer {
 	}
 
 	public static void registerCTDCommand() {
-		Config config = ConfigManager.config;
+		Config config = CONFIG_MANAGER.getConfig();
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, registrationEnvironment) -> {
 			CTDCommand.register(dispatcher);
 		});
 		if (config.util_config.debug_mode) {
-			DEBUG.info("[CTD] Registered commands.");
+			LOGGING.debug("[CTD] Registered commands.");
 		}
 	}
 
 	private static void initializeCTD() {
-		Config config = ConfigManager.config;
+		Config config = CONFIG_MANAGER.getConfig();
 		List<String> webhookUrlsList = config.discord_config.discord_webhooks;
 
 		if (!Objects.equals(config.format_version, CONFIG_V)) {
-			LoggingHandlers.error("[Config] Your Config somehow got out of sync with the version it's supposed to be. This can be dangerous. Try to re-run the instance after deleting the initial config file.");
+			LOGGING.error("[Config] Your Config somehow got out of sync with the version it's supposed to be. This can be dangerous. Try to re-run the instance after deleting the initial config file.");
 		}
 		if (webhookUrlsList.isEmpty()) {
-			LoggingHandlers.error("[Discord] No Webhooks Defined! Please Configure your webhooks in the Config file: ctd.json5");
+			LOGGING.error("[Discord] No Webhooks Defined! Please Configure your webhooks in the Config file: ctd.json5");
 		}
-		LoggingHandlers.debug("[CTD] Debug mode enabled.");
+		LOGGING.debug("[CTD] Debug mode enabled.");
 		if (config.discord_config.embed_mode) {
-			LoggingHandlers.info("[CTD] Embed mode enabled.");
+			LOGGING.info("[CTD] Embed mode enabled.");
 		} else {
-			LoggingHandlers.info("[CTD] Embed mode disabled.");
+			LOGGING.info("[CTD] Embed mode disabled.");
 		}
 	}
 }

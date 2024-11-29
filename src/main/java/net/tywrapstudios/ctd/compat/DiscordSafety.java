@@ -1,7 +1,7 @@
 package net.tywrapstudios.ctd.compat;
 
 
-import net.tywrapstudios.ctd.config.ConfigManager;
+import net.tywrapstudios.ctd.ChatToDiscord;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,7 +19,7 @@ public class DiscordSafety {
     }
 
     public static String modifyForRoleMentions(String message) {
-        List<String> allowedRoles = ConfigManager.config.discord_config.role_ids;
+        List<String> allowedRoles = ChatToDiscord.CONFIG_MANAGER.getConfig().discord_config.role_ids;
         Pattern pattern = Pattern.compile("<@&(\\d+)>");
         Matcher matcher = pattern.matcher(message);
 

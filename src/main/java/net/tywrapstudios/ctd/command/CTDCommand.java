@@ -8,8 +8,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.tywrapstudios.ctd.ChatToDiscord;
 import net.tywrapstudios.ctd.config.Config;
-import net.tywrapstudios.ctd.config.ConfigManager;
-import net.tywrapstudios.ctd.handlers.LoggingHandlers;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +24,7 @@ public class CTDCommand {
     }
 
     private static int execute(CommandContext<ServerCommandSource> context) {
-        Config config = ConfigManager.config;
+        Config config = ChatToDiscord.CONFIG_MANAGER.getConfig();
         List<String> webhooks = config.discord_config.discord_webhooks;
 
         ServerCommandSource source = context.getSource();
@@ -50,17 +48,15 @@ public class CTDCommand {
 
     private static int reload(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
-        if (Objects.equals(ConfigManager.config.format_version, ChatToDiscord.CONFIG_V)) {
+        if (Objects.equals(ChatToDiscord.CONFIG_MANAGER.getConfig().format_version, ChatToDiscord.CONFIG_V)) {
             source.sendFeedback(() -> {
                 return Text.literal("[ChatToDiscord] Reloading!").formatted(Formatting.GRAY);
             }, true);
-            ConfigManager.reloadConfig(context);
+            ChatToDiscord.CONFIG_MANAGER.loadConfig();
         } else {
-            source.sendFeedback(() -> {
-                return Text.literal("[ChatToDiscord] Could not reload CTD Config: Version out of sync, please delete your config file and rerun Minecraft.").formatted(Formatting.RED);
-            }, false);
-            if (!ConfigManager.config.util_config.suppress_warns) {
-                LoggingHandlers.error("[Config] Your Config Version is out of Sync, please delete your config file and reload Minecraft.");
+            source.sendFeedback(() -> Text.literal("[ChatToDiscord] Could not reload CTD Config: Version out of sync, please delete your config file and rerun Minecraft.").formatted(Formatting.RED), false);
+            if (!ChatToDiscord.CONFIG_MANAGER.getConfig().util_config.suppress_warns) {
+                ChatToDiscord.LOGGING.error("[Config] Your Config Version is out of Sync, please delete your config file and reload Minecraft.");
             }
         }
         return 1;

@@ -1,8 +1,8 @@
 package net.tywrapstudios.ctd.handlers;
 
+import net.tywrapstudios.ctd.ChatToDiscord;
 import net.tywrapstudios.ctd.compat.DiscordSafety;
 import net.tywrapstudios.ctd.config.Config;
-import net.tywrapstudios.ctd.config.ConfigManager;
 import net.tywrapstudios.ctd.discord.Discord;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutionException;
 public class Handlers {
 
     public static void handleChatMessage(String messageStr, String authorUUID, String authorName) {
-        Config config = ConfigManager.config;
+        Config config = ChatToDiscord.CONFIG_MANAGER.getConfig();
         List<String> webhookUrls = config.discord_config.discord_webhooks;
 
         messageStr = CompatHandlers.handleCompat(messageStr);
@@ -30,15 +30,15 @@ public class Handlers {
                     }
                 }
             } else {
-                LoggingHandlers.debug("The sender was the Server or a Remote Console (RCON).");
+                ChatToDiscord.LOGGING.debug("The sender was the Server or a Remote Console (RCON).");
             }
         } else {
-            LoggingHandlers.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
+            ChatToDiscord.LOGGING.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
         }
     }
 
     public static void handleGameMessage(String message) {
-        Config config = ConfigManager.config;
+        Config config = ChatToDiscord.CONFIG_MANAGER.getConfig();
         boolean embedMode = config.discord_config.embed_mode;
         List<String> webhookUrls = config.discord_config.discord_webhooks;
 
@@ -52,13 +52,13 @@ public class Handlers {
                     Discord.sendLiteralToDiscord(message, embedMode, url);
                 }
             } else {
-                LoggingHandlers.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
+                ChatToDiscord.LOGGING.error("[Discord] No webhooks configured! Please configure your webhooks in the Config file: ctd.json");
             }
         }
     }
 
     public static void handleCrash(String cause, String stack) throws ExecutionException, InterruptedException {
-        Config config = ConfigManager.config;
+        Config config = ChatToDiscord.CONFIG_MANAGER.getConfig();
         List<String> webhookUrls = config.discord_config.discord_webhooks;
         for (String url : webhookUrls) {
             Discord.sendCrashEmbed(cause, 7864320, url, stack);

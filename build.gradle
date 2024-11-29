@@ -29,6 +29,8 @@ dependencies {
 	implementation include("gs.mclo:api:${project.mclogs_version}")
 	// Jankson
 	implementation include("blue.endless:jankson:${project.jankson_version}")
+	// BlossomBridge
+	modImplementation("com.github.Tywrap-Studios:BlossomBridge:${project.blossombridge_version}")
 }
 
 processResources {
