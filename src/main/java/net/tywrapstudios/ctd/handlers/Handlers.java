@@ -70,7 +70,7 @@ public class Handlers {
         Config config = ChatToDiscord.CONFIG_MANAGER.getConfig();
         List<String> webhookUrls = config.discord_config.discord_webhooks;
         for (String url : webhookUrls) {
-            Discord.sendEmbedToDiscord("Timed out waiting for world statistics.\nView your console logs for more info.", "Spark",url,"console",7864320);
+            Discord.sendTimedOutEmbed(7864320, url);
         }
         e.printStackTrace();
     }

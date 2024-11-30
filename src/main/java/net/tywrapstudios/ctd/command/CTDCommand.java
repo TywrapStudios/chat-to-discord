@@ -8,9 +8,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.tywrapstudios.ctd.ChatToDiscord;
 import net.tywrapstudios.ctd.config.Config;
+import net.tywrapstudios.ctd.handlers.Handlers;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 public class CTDCommand {
     public CTDCommand() {
@@ -20,7 +23,53 @@ public class CTDCommand {
         dispatcher.register(CommandManager.literal("ctd").requires((source) -> source.hasPermissionLevel(2))
                 .executes(CTDCommand::execute)
                 .then(CommandManager.literal("reload")
-                        .executes(CTDCommand::reload)));
+                        .executes(CTDCommand::reload))
+                .then(CommandManager.literal("debug")
+                        .then(CommandManager.literal("dump_config")
+                                .executes(CTDCommand::dumpConfig))
+                        .then(CommandManager.literal("force_chat")
+                                .executes(CTDCommand::forceChat))
+                        .then(CommandManager.literal("force_game")
+                                .executes(CTDCommand::forceGameMessage))
+                        .then(CommandManager.literal("force_crash")
+                                .executes(CTDCommand::forceCrashMessage))
+                        .then(CommandManager.literal("force_timeout")
+                                .executes(CTDCommand::forceTimeoutMessage))
+                )
+        );
+    }
+
+    private static int forceTimeoutMessage(CommandContext<ServerCommandSource> context) {
+        Handlers.handleWorldTimeOut(new TimeoutException("DEBUG TIMEOUT"));
+        return 1;
+    }
+
+    private static int forceCrashMessage(CommandContext<ServerCommandSource> context) {
+        try {
+            Handlers.handleCrash("DEBUG CAUSE", "~~DEBUG CAUSE~~");
+        } catch (ExecutionException | InterruptedException ignored) {}
+        return 1;
+    }
+
+    private static int forceGameMessage(CommandContext<ServerCommandSource> context) {
+        Handlers.handleGameMessage("Debug message");
+        return 1;
+    }
+
+    private static int forceChat(CommandContext<ServerCommandSource> context) {
+        Handlers.handleChatMessage("Debug message", context.getSource().getPlayer().getUuidAsString(), context.getSource().getPlayer().getEntityName());
+        return 1;
+    }
+
+    private static int dumpConfig(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        String message = String.format("""
+                    --------[Config]---------
+                    %s
+                    -----------------------""",
+                ChatToDiscord.CONFIG_MANAGER.getConfigJsonAsString(false, true));
+        source.sendFeedback(() -> Text.literal(message).formatted(Formatting.GRAY), false);
+        return 1;
     }
 
     private static int execute(CommandContext<ServerCommandSource> context) {
