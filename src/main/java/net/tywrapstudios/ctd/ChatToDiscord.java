@@ -15,6 +15,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.tywrapstudios.blossombridge.api.config.ConfigManager;
+import net.tywrapstudios.blossombridge.api.config.InvalidConfigFormatException;
 import net.tywrapstudios.blossombridge.api.logging.LoggingHandler;
 import net.tywrapstudios.ctd.command.CTDCommand;
 import net.tywrapstudios.ctd.config.Config;
@@ -39,15 +40,15 @@ public class ChatToDiscord implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		CONFIG_V  = "2.0";
+		CONFIG_MANAGER.loadConfig();
+
 		LOGGING = new LoggingHandler<>("CTD", CONFIG_MANAGER.getConfig());
 		LOGGING.info("[CTD] CTD Loading up.");
 
 		Optional<ModContainer> ctdModContainer = FabricLoader.getInstance().getModContainer("ctd");
 
 		MCL.setProjectVersion(ctdModContainer.isPresent() ? ctdModContainer.get().getMetadata().getVersion().getFriendlyString() : "unknown");
-
-		CONFIG_V  = "2.0";
-		CONFIG_MANAGER.loadConfig();
 		registerCTDCommand();
 
 		initializeCTD();
@@ -102,7 +103,7 @@ public class ChatToDiscord implements ModInitializer {
 		List<String> webhookUrlsList = config.discord_config.discord_webhooks;
 
 		if (!Objects.equals(config.format_version, CONFIG_V)) {
-			LOGGING.error("[Config] Your Config somehow got out of sync with the version it's supposed to be. This can be dangerous. Try to re-run the instance after deleting the initial config file.");
+			throw new InvalidConfigFormatException("[Config] Your Config somehow got out of sync with the version it's supposed to be. This can be dangerous. Try to re-run the instance after deleting the initial config file.");
 		}
 		if (webhookUrlsList.isEmpty()) {
 			LOGGING.error("[Discord] No Webhooks Defined! Please Configure your webhooks in the Config file: ctd.json5");

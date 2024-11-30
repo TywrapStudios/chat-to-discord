@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 public class Xaero {
     public static String convertWayPointMessage(String message) {
         String[] vars = message.split(":");
-        if (vars.length < 10) {
+        if (vars.length <= 10) {
             return message;
         }
         if (!message.startsWith("xaero")) {
@@ -22,7 +22,7 @@ public class Xaero {
     }
 
     private static @NotNull String getDimension(String[] vars) {
-        String dimension = vars[10];
+        String dimension = vars[9];
         if (dimension.contains("end")||dimension.contains("nether")||dimension.contains("overworld")) {
             if (dimension.contains("end")) {
                 dimension = "the End";
