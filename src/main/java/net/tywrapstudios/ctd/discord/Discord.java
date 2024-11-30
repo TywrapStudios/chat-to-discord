@@ -111,7 +111,7 @@ public class Discord {
                 **Minecraft crashed with the following given cause:**
                 [`%s`]
                 **Stacktrace:**
-                [[`%s`](<%s>)]""", cause, response.getUrl().replace("https://mclo.gs/", "mclo.gs: "), response.getUrl());
+                [[`%s`](<%s>)]""", cause, response.getUrl().replace("https://mclo.gs/", ""), response.getUrl());
         Embed embed = new Embed()
                 .setColor(embedColor)
                 .setTitle("MINECRAFT EXPERIENCED AN EXCEPTION!")

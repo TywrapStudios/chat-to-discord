@@ -8,6 +8,7 @@ import net.tywrapstudios.ctd.discord.Discord;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 public class Handlers {
 
@@ -63,5 +64,14 @@ public class Handlers {
         for (String url : webhookUrls) {
             Discord.sendCrashEmbed(cause, 7864320, url, stack);
         }
+    }
+
+    public static void handleWorldTimeOut(TimeoutException e) {
+        Config config = ChatToDiscord.CONFIG_MANAGER.getConfig();
+        List<String> webhookUrls = config.discord_config.discord_webhooks;
+        for (String url : webhookUrls) {
+            Discord.sendEmbedToDiscord("Timed out waiting for world statistics.\nView your console logs for more info.", "Spark",url,"console",7864320);
+        }
+        e.printStackTrace();
     }
 }

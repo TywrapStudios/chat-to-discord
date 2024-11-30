@@ -31,6 +31,8 @@ dependencies {
 	implementation include("blue.endless:jankson:${project.jankson_version}")
 	// BlossomBridge
 	modImplementation("com.github.Tywrap-Studios:BlossomBridge:${project.blossombridge_version}")
+	// Spark
+	modImplementation files("libs/spark-${project.spark_version}-fabric.jar")
 }
 
 processResources {
