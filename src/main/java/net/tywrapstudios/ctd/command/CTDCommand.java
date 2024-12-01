@@ -25,6 +25,7 @@ public class CTDCommand {
                 .then(CommandManager.literal("reload")
                         .executes(CTDCommand::reload))
                 .then(CommandManager.literal("debug")
+                        .requires((source) -> source.hasPermissionLevel(3))
                         .then(CommandManager.literal("dump_config")
                                 .executes(CTDCommand::dumpConfig))
                         .then(CommandManager.literal("force_chat")
