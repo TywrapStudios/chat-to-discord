@@ -18,7 +18,7 @@ public abstract class ReloadMyConfig {
     @Inject(method = "method_13530",
             at = @At(value = "HEAD")
     )
-    private static void pekilog$ReloadMyConfig(CommandContext context, CallbackInfoReturnable<Integer> cir) {
+    private static void ctd$reloadMyConfig(CommandContext context, CallbackInfoReturnable<Integer> cir) {
         ServerCommandSource source = (ServerCommandSource) context.getSource();
         if (Objects.equals(ChatToDiscord.CONFIG_MANAGER.getConfig().format_version, ChatToDiscord.CONFIG_V)) {
             ChatToDiscord.CONFIG_MANAGER.loadConfig();
