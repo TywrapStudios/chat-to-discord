@@ -2,6 +2,7 @@ package net.tywrapstudios.ctd.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import me.lucko.spark.common.platform.world.AsyncWorldInfoProvider;
+import net.tywrapstudios.ctd.compat.Spark;
 import net.tywrapstudios.ctd.handlers.Handlers;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,6 +27,6 @@ public class AsyncWorldInfoProviderMixin {
             remap = false
     )
     private void ctd$printTimedOutStackTrace(CompletableFuture<?> future, CallbackInfoReturnable<?> cir, @Local TimeoutException e) {
-        Handlers.handleWorldTimeOut(e);
+        Spark.handleSparkWorldTimeOut(e);
     }
 }

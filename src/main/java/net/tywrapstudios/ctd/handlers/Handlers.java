@@ -65,13 +65,4 @@ public class Handlers {
             Discord.sendCrashEmbed(cause, 7864320, url, stack);
         }
     }
-
-    public static void handleWorldTimeOut(TimeoutException e) {
-        Config config = ChatToDiscord.CONFIG_MANAGER.getConfig();
-        List<String> webhookUrls = config.discord_config.discord_webhooks;
-        for (String url : webhookUrls) {
-            Discord.sendTimedOutEmbed(7864320, url);
-        }
-        e.printStackTrace();
-    }
 }

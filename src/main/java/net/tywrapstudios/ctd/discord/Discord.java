@@ -136,40 +136,11 @@ public class Discord {
                 .exec();
     }
 
-public static void sendTimedOutEmbed(int embedColor, String webhookUrl) {
-        String description = """
-                **Timed out waiting for world statistics.**
-                **Stacktrace:**
-                -> View your console logs for more information.""";
-        Embed embed = new Embed()
-                .setColor(embedColor)
-                .setTitle("Spark Profiler:")
-                .setDescription(description);
-        PlainMessage message = new PlainMessage()
-                .setContent("");
-        new WebhookConnector()
-                .setChannelUrl(webhookUrl)
-                .setEmbeds(new Embed[]{embed})
-                .setMessage(message)
-                .setListener(new WebhookClient.Callback() {
-                    @Override
-                    public void onSuccess(String response) {
-                        logSuccess("CTD", "CTD-Internals", "Sent a Timeout notice to the webhook(s).");
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, String errorMessage) {
-                        logFailure("Spark Timeout notice", statusCode, errorMessage, "CTD", "CTD-Internals");
-                    }
-                })
-                .exec();
-    }
-
-    private static void logSuccess(String playerName, String UUID, String chatMessage) {
+    public static void logSuccess(String playerName, String UUID, String chatMessage) {
         String log = String.format("[%s[%s]: %s]", playerName, UUID, chatMessage);
         ChatToDiscord.LOGGING.debug(log);
     }
-    private static void logFailure(String chatMessage, int statusCode, String errorMessage, String playerName, String UUID) {
+    public static void logFailure(String chatMessage, int statusCode, String errorMessage, String playerName, String UUID) {
         if (!ChatToDiscord.CONFIG_MANAGER.getConfig().util_config.suppress_warns) {
             ChatToDiscord.LOGGING.warn(String.format("Message \"%s\" by %s[%s] failed to send. ", chatMessage, playerName, UUID));
             ChatToDiscord.LOGGING.warn(String.format("Code: %s Error: %s", statusCode, errorMessage));
