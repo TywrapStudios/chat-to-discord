@@ -1,6 +1,8 @@
 package net.tywrapstudios.ctd.discord.webhook;
 
 import net.tywrapstudios.ctd.ChatToDiscord;
+import org.apache.http.protocol.RequestUserAgent;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -31,16 +33,7 @@ public class WebhookClient {
     public void send(String webhookUrl, JSONObject message) {
         try {
             // Create a URI object from the provided webhook URL
-            URI uri = new URI(webhookUrl);
-
-            // Open a connection to the webhook URL
-            HttpsURLConnection connection = (HttpsURLConnection) uri.toURL().openConnection();
-            connection.setRequestProperty("Content-Type", "application/json");
-            String userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
-            connection.setRequestProperty("User-Agent", userAgent);
-
-            // Enable output for sending POST data
-            connection.setDoOutput(true);
+            HttpsURLConnection connection = getHttpsURLConnection(webhookUrl);
 
             // Write the JSON message to the connection's output stream
             try (OutputStream stream = connection.getOutputStream()) {
@@ -61,6 +54,20 @@ public class WebhookClient {
             ChatToDiscord.LOGGING.error(String.format("[CTD] Error: %s", e.getMessage()));
             callback.onFailure(-1, e.getMessage());
         }
+    }
+
+    private static @NotNull HttpsURLConnection getHttpsURLConnection(String webhookUrl) throws URISyntaxException, IOException {
+        URI uri = new URI(webhookUrl);
+
+        // Open a connection to the webhook URL
+        HttpsURLConnection connection = (HttpsURLConnection) uri.toURL().openConnection();
+        connection.setRequestProperty("Content-Type", "application/json");
+        String userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
+        connection.setRequestProperty("User-Agent", userAgent);
+
+        // Enable output for sending POST data
+        connection.setDoOutput(true);
+        return connection;
     }
 
     /**

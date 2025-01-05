@@ -1,13 +1,12 @@
 package net.tywrapstudios.ctd;
 
 import gs.mclo.api.MclogsClient;
-import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.MinecraftServer;
@@ -20,13 +19,10 @@ import net.tywrapstudios.blossombridge.api.logging.LoggingHandler;
 import net.tywrapstudios.ctd.command.CTDCommand;
 import net.tywrapstudios.ctd.config.Config;
 import net.tywrapstudios.ctd.handlers.Handlers;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class ChatToDiscord implements ModInitializer {
 	public static final ConfigManager<Config> CONFIG_MANAGER =
@@ -34,7 +30,7 @@ public class ChatToDiscord implements ModInitializer {
 					"ctd.json5"));
 	public static String CONFIG_V;
 	public static final String MOD_V = FabricLoader.getInstance().getModContainer("ctd").orElseThrow().getMetadata().getVersion().getFriendlyString();
-	public static final MclogsClient MCL = new MclogsClient("Chat To Discord");
+	public static MclogsClient MCL;
 
 	public static LoggingHandler<Config> LOGGING;
 
@@ -46,11 +42,8 @@ public class ChatToDiscord implements ModInitializer {
 		LOGGING = new LoggingHandler<>("CTD", CONFIG_MANAGER.getConfig());
 		LOGGING.info("[CTD] CTD Loading up.");
 
-		Optional<ModContainer> ctdModContainer = FabricLoader.getInstance().getModContainer("ctd");
-
-		MCL.setProjectVersion(ctdModContainer.isPresent() ? ctdModContainer.get().getMetadata().getVersion().getFriendlyString() : "unknown");
+		MCL = new MclogsClient("Chat To Discord", MOD_V, "1.20.1");
 		registerCTDCommand();
-
 		initializeCTD();
 
 		ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStart);
