@@ -7,6 +7,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.tywrapstudios.ctd.ChatToDiscord;
+import net.tywrapstudios.ctd.compat.Spark;
 import net.tywrapstudios.ctd.config.Config;
 import net.tywrapstudios.ctd.handlers.Handlers;
 
@@ -41,7 +42,7 @@ public class CTDCommand {
     }
 
     private static int forceTimeoutMessage(CommandContext<ServerCommandSource> context) {
-        Handlers.handleWorldTimeOut(new TimeoutException("DEBUG TIMEOUT"));
+        Spark.handleSparkWorldTimeOut(new TimeoutException("DEBUG TIMEOUT"));
         return 1;
     }
 

@@ -1,5 +1,6 @@
 package net.tywrapstudios.ctd.discord;
 
+import gs.mclo.api.Log;
 import gs.mclo.api.response.UploadLogResponse;
 import net.fabricmc.loader.api.FabricLoader;
 import net.tywrapstudios.ctd.ChatToDiscord;
@@ -9,6 +10,7 @@ import net.tywrapstudios.ctd.discord.resources.Footer;
 import net.tywrapstudios.ctd.discord.webhook.WebhookClient;
 import net.tywrapstudios.ctd.discord.webhook.WebhookConnector;
 
+import java.io.File;
 import java.util.concurrent.ExecutionException;
 
 import static net.tywrapstudios.ctd.ChatToDiscord.MCL;
@@ -103,8 +105,9 @@ public class Discord {
                 .exec();
     }
 
-    public static void sendCrashEmbed(String cause, int embedColor, String webhookUrl, String stack) throws ExecutionException, InterruptedException {
+    public static void sendCrashEmbed(String cause, int embedColor, String webhookUrl, File log) throws ExecutionException, InterruptedException {
         MCL.setMinecraftVersion(FabricLoader.getInstance().getModContainer("minecraft").orElseThrow().getMetadata().getVersion().getFriendlyString());
+        Log stack = new Log(log.getPath());
         UploadLogResponse response = MCL.uploadLog(stack).get();
         response.setClient(MCL);
         String description = String.format("""

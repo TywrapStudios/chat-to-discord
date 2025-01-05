@@ -62,7 +62,7 @@ public class WebhookClient {
         // Open a connection to the webhook URL
         HttpsURLConnection connection = (HttpsURLConnection) uri.toURL().openConnection();
         connection.setRequestProperty("Content-Type", "application/json");
-        String userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
+        String userAgent = "Minecraft Server (Fabric) - ChatToDiscord Mod";
         connection.setRequestProperty("User-Agent", userAgent);
 
         // Enable output for sending POST data
